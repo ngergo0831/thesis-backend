@@ -38,7 +38,6 @@ export class Intake {
   userId: string;
 
   @OneToOne(() => Diet)
-  @JoinColumn()
   diet: Diet;
 
   @CreateDateColumn()
