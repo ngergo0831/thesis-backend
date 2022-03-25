@@ -9,9 +9,9 @@ const ormconfig: TypeOrmModuleOptions = {
   password: 'root',
   database: 'thesis',
   synchronize: false,
-  entities: [join(__dirname, '..', '**', '*.entity*{.ts,.js}')],
+  entities: [join(__dirname, 'src', '**', '*.entity*{.ts,.js}')],
   logging: false,
-  migrations: [join(__dirname, '..', 'migrations', '*{.ts,.js}')],
+  migrations: [join(__dirname, 'src', 'migrations', '*{.ts,.js}')],
   migrationsTableName: 'migration',
   cli: {
     migrationsDir: 'src/migrations'

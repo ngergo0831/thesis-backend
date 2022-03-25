@@ -26,7 +26,7 @@ export class Comment {
   userId: string;
 
   @ManyToOne(() => Diet, (diet) => diet.comments)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'dietId' })
   diet: Diet;
 
   @Column()
