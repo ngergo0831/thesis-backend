@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,7 +7,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToOne
+  OneToOne,
+  BeforeInsert
 } from 'typeorm';
 import { Diet } from '../diet/diet.entity';
 import { User } from '../user/user.entity';
@@ -23,7 +25,7 @@ export class Intake {
   fat: number;
 
   @Column()
-  ch: number;
+  carbs: number;
 
   @Column()
   protein: number;

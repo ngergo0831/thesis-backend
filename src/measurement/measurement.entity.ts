@@ -15,4 +15,8 @@ export class Measurement {
 
   @Column({ nullable: true })
   userId: string;
+
+  constructor(measurement?: Partial<Measurement>) {
+    Object.assign(this, measurement);
+  }
 }
