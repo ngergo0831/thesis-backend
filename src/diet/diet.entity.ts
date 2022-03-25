@@ -7,7 +7,8 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
-  ManyToMany
+  ManyToMany,
+  OneToOne
 } from 'typeorm';
 import { Comment } from '../comment/comment.entity';
 import { Period } from '../enum/period.enum';
@@ -19,7 +20,8 @@ export class Diet {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @OneToOne(() => Intake)
+  @JoinColumn()
   intake: Intake;
 
   @Column({ type: 'enum', enum: Period, nullable: true })

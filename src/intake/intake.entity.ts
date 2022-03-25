@@ -5,8 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  OneToOne
 } from 'typeorm';
+import { Diet } from '../diet/diet.entity';
 import { User } from '../user/user.entity';
 
 @Entity()
@@ -32,6 +34,10 @@ export class Intake {
 
   @Column({ nullable: true })
   userId: string;
+
+  @OneToOne(() => Diet)
+  @JoinColumn()
+  diet: Diet;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -19,7 +19,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "typeorm": "ts-node ./node_modules/typeorm/cli.js -f src/config/ormConfig.ts",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js -f ormconfig.ts",
     "migration:generate": "run(){ npm run typeorm migration:generate -- -n $1 ;} ; run",
     "migration:up": "run(){ npm run typeorm migration:run ;} ; run",
     "migration:down": "run(){ npm run typeorm migration:revert ;} ; run",
