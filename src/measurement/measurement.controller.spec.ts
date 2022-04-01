@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MeasurementController } from './Measurement.controller';
-import { Measurement } from './Measurement.entity';
-import { MeasurementService } from './Measurement.service';
+import { MeasurementController } from './measurement.controller';
+import { Measurement } from './measurement.entity';
+import { MeasurementService } from './measurement.service';
 
-jest.mock('./Measurement.service.ts');
+jest.mock('./measurement.service.ts');
 
 describe('MeasurementController', () => {
   let controller: MeasurementController;

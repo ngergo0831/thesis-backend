@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { IntakeController } from './Intake.controller';
-import { Intake } from './Intake.entity';
-import { IntakeService } from './Intake.service';
+import { IntakeController } from './intake.controller';
+import { Intake } from './intake.entity';
+import { IntakeService } from './intake.service';
 
-jest.mock('./Intake.service.ts');
+jest.mock('./intake.service.ts');
 
 describe('IntakeController', () => {
   let controller: IntakeController;
