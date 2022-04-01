@@ -12,12 +12,6 @@ export class IntakeService {
   }
 
   public async getIntakeById(id: string): Promise<Intake> {
-    const intake = await this.intakeRepository.findOne(id);
-
-    if (!intake) {
-      throw new NotFoundException(`Intake not found with id ${id}`);
-    }
-
-    return intake;
+    return this.intakeRepository.findOne(id);
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Diet } from './diet.entity';
 import { DietService } from './diet.service';
@@ -15,6 +15,12 @@ export class DietController {
 
   @Get('/:id')
   public async getDietById(@Param('id') id: string): Promise<Diet> {
-    return this.dietService.getDietById(id);
+    const diet = await this.dietService.getDietById(id);
+
+    if (!diet) {
+      throw new NotFoundException(`Diet not found with id ${id}`);
+    }
+
+    return diet;
   }
 }

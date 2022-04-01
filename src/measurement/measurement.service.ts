@@ -14,12 +14,6 @@ export class MeasurementService {
   }
 
   public async getMeasurementById(id: string): Promise<Measurement> {
-    const measurement = await this.measurementRepository.findOne(id);
-
-    if (!measurement) {
-      throw new NotFoundException(`Measurement not found with id ${id}`);
-    }
-
-    return measurement;
+    return this.measurementRepository.findOne(id);
   }
 }

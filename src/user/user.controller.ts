@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -15,6 +15,12 @@ export class UserController {
 
   @Get('/:id')
   public async getUserById(@Param('id') id: string): Promise<User> {
-    return this.userService.getUserById(id);
+    const user = await this.userService.getUserById(id);
+
+    if (!user) {
+      throw new NotFoundException(`User not found with id ${id}`);
+    }
+
+    return user;
   }
 }

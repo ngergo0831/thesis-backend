@@ -15,6 +15,12 @@ export class MeasurementController {
 
   @Get('/:id')
   public async getMeasurementById(@Param('id') id: string): Promise<Measurement> {
-    return this.measurementService.getMeasurementById(id);
+    const measurement = await this.measurementService.getMeasurementById(id);
+
+    if (!measurement) {
+      throw new NotFoundException(`Measurement not found with id ${id}`);
+    }
+
+    return measurement;
   }
 }

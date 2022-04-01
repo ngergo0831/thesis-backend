@@ -12,12 +12,6 @@ export class DietService {
   }
 
   public async getDietById(id: string): Promise<Diet> {
-    const diet = await this.dietRepository.findOne(id);
-
-    if (!diet) {
-      throw new NotFoundException(`Diet not found with id ${id}`);
-    }
-
-    return diet;
+    return this.dietRepository.findOne(id);
   }
 }
