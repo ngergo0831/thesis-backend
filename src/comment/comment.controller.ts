@@ -1,4 +1,4 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Comment } from './comment.entity';
 import { CommentService } from './comment.service';
@@ -23,4 +23,12 @@ export class CommentController {
 
     return comment;
   }
+
+  // @Post()
+  // public async createComment(
+  //   @Param('id') id: string,
+  //   @Param('comment') comment: string
+  // ): Promise<Comment> {
+  //   return this.commentService.createComment(id, comment);
+  // }
 }
