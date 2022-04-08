@@ -13,7 +13,11 @@ async function bootstrap() {
     .addTag('thesis')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, document);
+  SwaggerModule.setup('swagger', app, document, {
+    swaggerOptions: {
+      supportedSubmitMethods: []
+    }
+  });
 
   await app.listen(3000);
 }

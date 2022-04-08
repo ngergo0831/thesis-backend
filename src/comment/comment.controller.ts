@@ -1,4 +1,14 @@
-import { Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  Patch,
+  Post
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Comment } from './comment.entity';
 import { CommentService } from './comment.service';
@@ -24,11 +34,32 @@ export class CommentController {
     return comment;
   }
 
-  // @Post()
-  // public async createComment(
-  //   @Param('id') id: string,
-  //   @Param('comment') comment: string
-  // ): Promise<Comment> {
-  //   return this.commentService.createComment(id, comment);
-  // }
+  @Post()
+  public async createComment(@Body() comment: Comment): Promise<Comment> {
+    return this.commentService.createComment(comment);
+  }
+
+  @Patch(':id')
+  @HttpCode(204)
+  public async updateComment(@Param('id') id: string, @Body() comment: Comment): Promise<void> {
+    const commentToUpdate = await this.commentService.getCommentById(id);
+
+    if (!id || !commentToUpdate) {
+      throw new NotFoundException(`Comment not found with id ${id}`);
+    }
+
+    await this.commentService.updateComment(comment);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  public async deleteComment(@Param('id') id: string): Promise<void> {
+    const commentToDelete = await this.commentService.getCommentById(id);
+
+    if (!id || !commentToDelete) {
+      throw new NotFoundException(`Comment not found with id ${id}`);
+    }
+
+    await this.commentService.deleteComment(id);
+  }
 }

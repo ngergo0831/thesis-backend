@@ -14,4 +14,17 @@ export class CommentService {
   public async getCommentById(id: string): Promise<Comment> {
     return this.commentRepository.findOne(id);
   }
+
+  public async createComment(comment: Comment): Promise<Comment> {
+    return this.commentRepository.save(comment);
+  }
+
+  public async updateComment(comment: Comment): Promise<void> {
+    const { id, userId } = comment;
+    await this.commentRepository.update({ id, userId }, { ...comment });
+  }
+
+  public async deleteComment(id: string): Promise<void> {
+    await this.commentRepository.delete(id);
+  }
 }
