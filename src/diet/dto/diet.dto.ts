@@ -1,11 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Period } from '../../enum/period.enum';
-import { Intake } from '../../intake/intake.entity';
 import { IsEnum } from 'class-validator';
 
 export class DietDto implements IDiet {
-  @ApiProperty({ type: Intake })
-  intake: Intake;
+  @ApiProperty()
+  intakeId: string;
 
   @IsEnum(Period)
   @ApiProperty({ enum: Period })
@@ -16,7 +15,7 @@ export class DietDto implements IDiet {
 }
 
 export interface IDiet {
-  intake: Intake;
+  intakeId: string;
   period?: Period;
   creatorId: string;
 }

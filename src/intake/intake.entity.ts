@@ -29,7 +29,7 @@ export class Intake {
   @Column()
   protein: number;
 
-  @ManyToOne(() => User, (user) => user.comments)
+  @ManyToOne(() => User, (user) => user.intakes)
   @JoinColumn({ name: 'userId' })
   user: User;
 
