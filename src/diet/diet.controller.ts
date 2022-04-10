@@ -12,6 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { Diet } from './diet.entity';
 import { DietService } from './diet.service';
+import { DietDto } from './dto/diet.dto';
 
 @ApiTags('Diets')
 @Controller('diets')
@@ -19,12 +20,12 @@ export class DietController {
   constructor(private readonly dietService: DietService) {}
 
   @Get()
-  public async getAllDiets(): Promise<Diet[]> {
+  public async getAllDiets(): Promise<DietDto[]> {
     return this.dietService.getAllDiets();
   }
 
   @Get('/:id')
-  public async getDietById(@Param('id') id: string): Promise<Diet> {
+  public async getDietById(@Param('id') id: string): Promise<DietDto> {
     const diet = await this.dietService.getDietById(id);
 
     if (!diet) {
@@ -35,20 +36,20 @@ export class DietController {
   }
 
   @Post()
-  public async createDiet(@Body() diet: Diet): Promise<Diet> {
+  public async createDiet(@Body() diet: DietDto): Promise<DietDto> {
     return this.dietService.createDiet(diet);
   }
 
   @Patch(':id')
   @HttpCode(204)
-  public async updateDiet(@Param('id') id: string, @Body() diet: Diet): Promise<void> {
+  public async updateDiet(@Param('id') id: string, @Body() diet: DietDto): Promise<void> {
     const dietToUpdate = await this.dietService.getDietById(id);
 
     if (!id || !dietToUpdate) {
       throw new NotFoundException(`Diet not found with id ${id}`);
     }
 
-    await this.dietService.updateDiet(diet);
+    await this.dietService.updateDiet(id, diet);
   }
 
   @Delete(':id')

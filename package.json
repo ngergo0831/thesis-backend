@@ -25,7 +25,7 @@
     "migration:generate": "run(){ npm run typeorm migration:generate -- -n $1 ;} ; run",
     "migration:up": "run(){ npm run typeorm migration:run ;} ; run",
     "migration:down": "run(){ npm run typeorm migration:revert ;} ; run",
-    "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
+    "db:seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -35,6 +35,7 @@
     "@nestjs/typeorm": "^8.0.3",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
     "faker": "^5.5.3",
     "jest-coverage-badges": "^1.1.2",
     "moment": "^2.29.1",

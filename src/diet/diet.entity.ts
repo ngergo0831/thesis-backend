@@ -20,9 +20,12 @@ export class Diet {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => Intake)
-  @JoinColumn()
+  @OneToOne(() => Intake, (intake) => intake.diet)
+  @JoinColumn({ name: 'intakeId' })
   intake: Intake;
+
+  @Column()
+  intakeId: string;
 
   @Column({ type: 'enum', enum: Period, nullable: true })
   period: Period;
