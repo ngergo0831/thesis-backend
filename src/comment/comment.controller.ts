@@ -12,6 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { Comment } from './comment.entity';
 import { CommentService } from './comment.service';
+import { CommentDto } from './dto/comment.dto';
 
 @ApiTags('Comments')
 @Controller('comments')
@@ -19,12 +20,12 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Get()
-  public async getAllComments(): Promise<Comment[]> {
+  public async getAllComments(): Promise<CommentDto[]> {
     return this.commentService.getAllComments();
   }
 
   @Get('/:id')
-  public async getCommentById(@Param('id') id: string): Promise<Comment> {
+  public async getCommentById(@Param('id') id: string): Promise<CommentDto> {
     const comment = await this.commentService.getCommentById(id);
 
     if (!comment) {
@@ -35,20 +36,20 @@ export class CommentController {
   }
 
   @Post()
-  public async createComment(@Body() comment: Comment): Promise<Comment> {
+  public async createComment(@Body() comment: CommentDto): Promise<CommentDto> {
     return this.commentService.createComment(comment);
   }
 
   @Patch(':id')
   @HttpCode(204)
-  public async updateComment(@Param('id') id: string, @Body() comment: Comment): Promise<void> {
+  public async updateComment(@Param('id') id: string, @Body() comment: CommentDto): Promise<void> {
     const commentToUpdate = await this.commentService.getCommentById(id);
 
     if (!id || !commentToUpdate) {
       throw new NotFoundException(`Comment not found with id ${id}`);
     }
 
-    await this.commentService.updateComment(comment);
+    await this.commentService.updateComment(id, comment);
   }
 
   @Delete(':id')
