@@ -10,6 +10,7 @@ import {
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { UserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -19,12 +20,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  public async getAllUsers(): Promise<User[]> {
+  public async getAllUsers(): Promise<UserDto[]> {
     return this.userService.getAllUsers();
   }
 
   @Get('/:id')
-  public async getUserById(@Param('id') id: string): Promise<User> {
+  public async getUserById(@Param('id') id: string): Promise<UserDto> {
     const user = await this.userService.getUserById(id);
 
     if (!user) {
@@ -35,20 +36,20 @@ export class UserController {
   }
 
   @Post()
-  public async createUser(@Body() user: User): Promise<User> {
+  public async createUser(@Body() user: UserDto): Promise<UserDto> {
     return this.userService.createUser(user);
   }
 
   @Patch(':id')
   @HttpCode(204)
-  public async updateUser(@Param('id') id: string, @Body() user: User): Promise<void> {
+  public async updateUser(@Param('id') id: string, @Body() user: UserDto): Promise<void> {
     const userToUpdate = await this.userService.getUserById(id);
 
     if (!id || !userToUpdate) {
       throw new NotFoundException(`User not found with id ${id}`);
     }
 
-    await this.userService.updateUser(user);
+    await this.userService.updateUser(id, user);
   }
 
   @Delete(':id')
