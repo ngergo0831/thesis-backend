@@ -1,4 +1,14 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  Patch,
+  Post
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -22,5 +32,34 @@ export class UserController {
     }
 
     return user;
+  }
+
+  @Post()
+  public async createUser(@Body() user: User): Promise<User> {
+    return this.userService.createUser(user);
+  }
+
+  @Patch(':id')
+  @HttpCode(204)
+  public async updateUser(@Param('id') id: string, @Body() user: User): Promise<void> {
+    const userToUpdate = await this.userService.getUserById(id);
+
+    if (!id || !userToUpdate) {
+      throw new NotFoundException(`User not found with id ${id}`);
+    }
+
+    await this.userService.updateUser(user);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  public async deleteUser(@Param('id') id: string): Promise<void> {
+    const userToDelete = await this.userService.getUserById(id);
+
+    if (!id || !userToDelete) {
+      throw new NotFoundException(`User not found with id ${id}`);
+    }
+
+    await this.userService.deleteUser(id);
   }
 }
