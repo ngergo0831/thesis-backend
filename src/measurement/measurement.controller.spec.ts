@@ -30,7 +30,7 @@ describe('MeasurementController', () => {
         .spyOn(service, 'getAllMeasurements')
         .mockResolvedValue([] as Measurement[]);
 
-      await controller.getAllMeasurements();
+      await controller.getAllMeasurements('1');
 
       expect(getAllMeasurementsSpy).toHaveBeenCalledTimes(1);
     });
@@ -40,7 +40,7 @@ describe('MeasurementController', () => {
 
       jest.spyOn(service, 'getAllMeasurements').mockResolvedValue(mockedMeasurements);
 
-      const result = await controller.getAllMeasurements();
+      const result = await controller.getAllMeasurements('1');
 
       expect(result).toBe(mockedMeasurements);
     });

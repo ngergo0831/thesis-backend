@@ -10,8 +10,8 @@ export class MeasurementService {
     @InjectRepository(Measurement) private measurementRepository: Repository<Measurement>
   ) {}
 
-  public async getAllMeasurements(): Promise<MeasurementDto[]> {
-    return this.measurementRepository.find();
+  public async getAllMeasurements(userId: string): Promise<MeasurementDto[]> {
+    return this.measurementRepository.find({ userId });
   }
 
   public async getMeasurementById(id: string): Promise<MeasurementDto> {

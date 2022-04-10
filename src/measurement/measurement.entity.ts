@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  JoinColumn,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn
+} from 'typeorm';
 import { User } from '../user/user.entity';
 
 @Entity()
@@ -15,6 +23,12 @@ export class Measurement {
 
   @Column({ nullable: true })
   userId: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   constructor(measurement?: Partial<Measurement>) {
     Object.assign(this, measurement);

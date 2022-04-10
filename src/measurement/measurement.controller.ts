@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MeasurementDto } from './dto/measurement.dto';
-import { Measurement } from './measurement.entity';
 import { MeasurementService } from './measurement.service';
 
 @ApiTags('Measurements')
@@ -19,12 +18,12 @@ import { MeasurementService } from './measurement.service';
 export class MeasurementController {
   constructor(private readonly measurementService: MeasurementService) {}
 
-  @Get()
-  public async getAllMeasurements(): Promise<any> {
-    return this.measurementService.getAllMeasurements();
+  @Get('user/:id')
+  public async getAllMeasurements(@Param('id') userId: string): Promise<any> {
+    return this.measurementService.getAllMeasurements(userId);
   }
 
-  @Get('/:id')
+  @Get(':id')
   public async getMeasurementById(@Param('id') id: string): Promise<MeasurementDto> {
     const measurement = await this.measurementService.getMeasurementById(id);
 
