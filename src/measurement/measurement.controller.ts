@@ -10,6 +10,7 @@ import {
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { MeasurementDto } from './dto/measurement.dto';
 import { Measurement } from './measurement.entity';
 import { MeasurementService } from './measurement.service';
 
@@ -24,7 +25,7 @@ export class MeasurementController {
   }
 
   @Get('/:id')
-  public async getMeasurementById(@Param('id') id: string): Promise<Measurement> {
+  public async getMeasurementById(@Param('id') id: string): Promise<MeasurementDto> {
     const measurement = await this.measurementService.getMeasurementById(id);
 
     if (!measurement) {
@@ -35,7 +36,7 @@ export class MeasurementController {
   }
 
   @Post()
-  public async createMeasurement(@Body() measurement: Measurement): Promise<Measurement> {
+  public async createMeasurement(@Body() measurement: MeasurementDto): Promise<MeasurementDto> {
     return this.measurementService.createMeasurement(measurement);
   }
 
@@ -43,7 +44,7 @@ export class MeasurementController {
   @HttpCode(204)
   public async updateMeasurement(
     @Param('id') id: string,
-    @Body() measurement: Measurement
+    @Body() measurement: MeasurementDto
   ): Promise<void> {
     const measurementToUpdate = await this.measurementService.getMeasurementById(id);
 
@@ -51,7 +52,7 @@ export class MeasurementController {
       throw new NotFoundException(`Measurement not found with id ${id}`);
     }
 
-    await this.measurementService.updateMeasurement(measurement);
+    await this.measurementService.updateMeasurement(id, measurement);
   }
 
   @Delete(':id')

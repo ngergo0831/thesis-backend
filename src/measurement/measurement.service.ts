@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { MeasurementDto } from './dto/measurement.dto';
 import { Measurement } from './measurement.entity';
 
 @Injectable()
@@ -9,20 +10,20 @@ export class MeasurementService {
     @InjectRepository(Measurement) private measurementRepository: Repository<Measurement>
   ) {}
 
-  public async getAllMeasurements(): Promise<Measurement[]> {
+  public async getAllMeasurements(): Promise<MeasurementDto[]> {
     return this.measurementRepository.find();
   }
 
-  public async getMeasurementById(id: string): Promise<Measurement> {
+  public async getMeasurementById(id: string): Promise<MeasurementDto> {
     return this.measurementRepository.findOne(id);
   }
 
-  public async createMeasurement(measurement: Measurement): Promise<Measurement> {
+  public async createMeasurement(measurement: MeasurementDto): Promise<MeasurementDto> {
     return this.measurementRepository.save(measurement);
   }
 
-  public async updateMeasurement(measurement: Measurement): Promise<void> {
-    await this.measurementRepository.update(measurement.id, measurement);
+  public async updateMeasurement(id: string, measurement: MeasurementDto): Promise<void> {
+    await this.measurementRepository.update(id, measurement);
   }
 
   public async deleteMeasurement(id: string): Promise<void> {
