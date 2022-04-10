@@ -11,7 +11,12 @@ export class MeasurementService {
   ) {}
 
   public async getAllMeasurements(userId: string): Promise<MeasurementDto[]> {
-    return this.measurementRepository.find({ userId });
+    return this.measurementRepository.find({
+      where: { userId },
+      order: {
+        createdAt: 'DESC'
+      }
+    });
   }
 
   public async getMeasurementById(id: string): Promise<MeasurementDto> {
