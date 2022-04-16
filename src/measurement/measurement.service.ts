@@ -28,6 +28,7 @@ export class MeasurementService {
   }
 
   public async updateMeasurement(id: string, measurement: MeasurementDto): Promise<void> {
+    console.log(measurement);
     await this.measurementRepository.update(id, measurement);
   }
 
