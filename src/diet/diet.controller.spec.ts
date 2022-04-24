@@ -28,7 +28,7 @@ describe('DietController', () => {
     it('should call getAllDiets', async () => {
       const getAllDietsSpy = jest.spyOn(service, 'getAllDiets').mockResolvedValue([] as Diet[]);
 
-      await controller.getAllDiets();
+      await controller.getAllDiets('1');
 
       expect(getAllDietsSpy).toHaveBeenCalledTimes(1);
     });
@@ -38,7 +38,7 @@ describe('DietController', () => {
 
       jest.spyOn(service, 'getAllDiets').mockResolvedValue(mockedDiets);
 
-      const result = await controller.getAllDiets();
+      const result = await controller.getAllDiets('1');
 
       expect(result).toBe(mockedDiets);
     });

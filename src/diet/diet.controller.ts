@@ -10,7 +10,6 @@ import {
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Diet } from './diet.entity';
 import { DietService } from './diet.service';
 import { DietDto } from './dto/diet.dto';
 
@@ -19,9 +18,9 @@ import { DietDto } from './dto/diet.dto';
 export class DietController {
   constructor(private readonly dietService: DietService) {}
 
-  @Get()
-  public async getAllDiets(): Promise<DietDto[]> {
-    return this.dietService.getAllDiets();
+  @Get('user/:id')
+  public async getAllDiets(@Param('id') userId: string): Promise<DietDto[]> {
+    return this.dietService.getAllDiets(userId);
   }
 
   @Get('/:id')

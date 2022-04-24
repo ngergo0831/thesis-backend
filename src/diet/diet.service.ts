@@ -8,8 +8,14 @@ import { DietDto } from './dto/diet.dto';
 export class DietService {
   constructor(@InjectRepository(Diet) private dietRepository: Repository<Diet>) {}
 
-  public async getAllDiets(): Promise<DietDto[]> {
-    return this.dietRepository.find();
+  public async getAllDiets(userId: string): Promise<DietDto[]> {
+    return this.dietRepository.find({
+      where: { creatorId: userId },
+      order: {
+        createdAt: 'DESC'
+      },
+      relations: ['intake', 'comments', 'likedBy']
+    });
   }
 
   public async getDietById(id: string): Promise<DietDto> {
