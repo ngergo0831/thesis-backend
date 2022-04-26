@@ -10,17 +10,28 @@ import {
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { User } from '../user/user.entity';
+import { UserService } from '../user/user.service';
+import { Diet } from './diet.entity';
 import { DietService } from './diet.service';
 import { DietDto } from './dto/diet.dto';
 
 @ApiTags('Diets')
 @Controller('diets')
 export class DietController {
-  constructor(private readonly dietService: DietService) {}
+  constructor(
+    private readonly dietService: DietService,
+    private readonly userService: UserService
+  ) {}
+
+  @Get()
+  public async getAllDiets(): Promise<DietDto[]> {
+    return this.dietService.getAllDiets();
+  }
 
   @Get('user/:id')
-  public async getAllDiets(@Param('id') userId: string): Promise<DietDto[]> {
-    return this.dietService.getAllDiets(userId);
+  public async getAllDietsByUserId(@Param('id') userId: string): Promise<DietDto[]> {
+    return this.dietService.getAllDietsByUserId(userId);
   }
 
   @Get('/:id')
@@ -61,5 +72,20 @@ export class DietController {
     }
 
     await this.dietService.deleteDiet(id);
+  }
+
+  @Post('/:id/like')
+  public async likeDiet(
+    @Param('id') id: string,
+    @Body() { userId }: { userId: string }
+  ): Promise<void> {
+    const diet = (await this.dietService.getDietById(id)) as Diet;
+    const user = (await this.userService.getUserById(userId)) as User;
+
+    if (!diet || !user) {
+      throw new NotFoundException(`Diet or user not found with id ${id}`);
+    }
+
+    return this.dietService.likeDiet(diet, user);
   }
 }
