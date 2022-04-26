@@ -45,7 +45,7 @@ const getMetaData = winston.format((info) => {
 
 const developmentFormat = [
   winston.format.simple(),
-  nestWinstonModuleUtilities.format.nestLike('F4A', { prettyPrint: true })
+  nestWinstonModuleUtilities.format.nestLike('Thesis', { prettyPrint: true })
 ];
 
 const environmentSpecific = developmentFormat;

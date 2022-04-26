@@ -88,4 +88,19 @@ export class DietController {
 
     return this.dietService.likeDiet(diet, user);
   }
+
+  @Post('/:id/save')
+  public async saveDiet(
+    @Param('id') id: string,
+    @Body() { userId }: { userId: string }
+  ): Promise<void> {
+    const diet = (await this.dietService.getDietById(id)) as Diet;
+    const user = (await this.userService.getUserById(userId)) as User;
+
+    if (!diet || !user) {
+      throw new NotFoundException(`Diet or user not found with id ${id}`);
+    }
+
+    return this.dietService.saveDiet(diet, user);
+  }
 }

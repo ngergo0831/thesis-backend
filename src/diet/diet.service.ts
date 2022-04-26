@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserDto } from '../user/dto/user.dto';
 import { User } from '../user/user.entity';
 import { Diet } from './diet.entity';
 import { DietDto } from './dto/diet.dto';
@@ -16,7 +15,7 @@ export class DietService {
       order: {
         createdAt: 'DESC'
       },
-      relations: ['intake', 'comments', 'likedBy']
+      relations: ['intake', 'comments', 'likedBy', 'savedBy']
     });
   }
 
@@ -25,12 +24,18 @@ export class DietService {
       order: {
         createdAt: 'DESC'
       },
-      relations: ['intake', 'comments', 'likedBy']
+      relations: ['intake', 'comments', 'likedBy', 'savedBy']
     });
   }
 
   public async getDietById(id: string): Promise<DietDto> {
-    return this.dietRepository.findOne({ where: { id }, relations: ['likedBy'] });
+    return this.dietRepository.findOne({
+      where: { id },
+      order: {
+        createdAt: 'DESC'
+      },
+      relations: ['likedBy', 'savedBy', 'intake', 'comments']
+    });
   }
 
   public async createDiet(diet: DietDto): Promise<DietDto> {
@@ -52,6 +57,18 @@ export class DietService {
       diet.likedBy = diet.likedBy.filter(({ id }) => id !== user.id);
     } else {
       diet.likedBy.push(user);
+    }
+
+    await this.dietRepository.save(diet);
+  }
+
+  public async saveDiet(diet: Diet, user: User): Promise<void> {
+    const alreadySaved = diet.savedBy.some(({ id }) => id === user.id);
+
+    if (alreadySaved) {
+      diet.savedBy = diet.savedBy.filter(({ id }) => id !== user.id);
+    } else {
+      diet.savedBy.push(user);
     }
 
     await this.dietRepository.save(diet);
