@@ -1,5 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from '../user/user.entity';
+import { UserService } from '../user/user.service';
 import { DietController } from './diet.controller';
 import { Diet } from './diet.entity';
 import { DietService } from './diet.service';
@@ -13,7 +16,14 @@ describe('DietController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DietController],
-      providers: [DietService]
+      providers: [
+        DietService,
+        UserService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: {}
+        }
+      ]
     }).compile();
 
     controller = module.get<DietController>(DietController);
@@ -28,7 +38,7 @@ describe('DietController', () => {
     it('should call getAllDiets', async () => {
       const getAllDietsSpy = jest.spyOn(service, 'getAllDiets').mockResolvedValue([] as Diet[]);
 
-      await controller.getAllDiets('1');
+      await controller.getAllDiets();
 
       expect(getAllDietsSpy).toHaveBeenCalledTimes(1);
     });
@@ -38,7 +48,7 @@ describe('DietController', () => {
 
       jest.spyOn(service, 'getAllDiets').mockResolvedValue(mockedDiets);
 
-      const result = await controller.getAllDiets('1');
+      const result = await controller.getAllDiets();
 
       expect(result).toBe(mockedDiets);
     });
