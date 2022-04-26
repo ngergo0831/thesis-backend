@@ -10,6 +10,7 @@ import {
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { DietDto } from '../diet/dto/diet.dto';
 import { UserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -62,5 +63,10 @@ export class UserController {
     }
 
     await this.userService.deleteUser(id);
+  }
+
+  @Get('/:id/saved-diets')
+  public async getSavedDietsByUserId(@Param('id') userId: string): Promise<DietDto[]> {
+    return this.userService.getSavedDietsByUserId(userId);
   }
 }
