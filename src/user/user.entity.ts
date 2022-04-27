@@ -33,8 +33,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Exclude()
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column({ type: 'float', nullable: true })
