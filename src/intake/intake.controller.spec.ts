@@ -1,5 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Diet } from '../diet/diet.entity';
+import { DietService } from '../diet/diet.service';
 import { IntakeController } from './intake.controller';
 import { Intake } from './intake.entity';
 import { IntakeService } from './intake.service';
@@ -13,7 +16,14 @@ describe('IntakeController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [IntakeController],
-      providers: [IntakeService]
+      providers: [
+        IntakeService,
+        DietService,
+        {
+          provide: getRepositoryToken(Diet),
+          useValue: {}
+        }
+      ]
     }).compile();
 
     controller = module.get<IntakeController>(IntakeController);

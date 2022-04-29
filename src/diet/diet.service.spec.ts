@@ -12,7 +12,6 @@ describe('DietService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DietService,
-
         {
           provide: 'DietRepository',
           useClass: Repository

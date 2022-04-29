@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Diet } from '../diet/diet.entity';
+import { DietService } from '../diet/diet.service';
 import { Intake } from './intake.entity';
 import { IntakeService } from './intake.service';
 
@@ -12,9 +14,14 @@ describe('IntakeService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         IntakeService,
+        DietService,
         {
           provide: 'IntakeRepository',
           useClass: Repository
+        },
+        {
+          provide: getRepositoryToken(Diet),
+          useValue: {}
         }
       ]
     }).compile();

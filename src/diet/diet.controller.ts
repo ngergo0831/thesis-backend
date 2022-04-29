@@ -34,7 +34,7 @@ export class DietController {
     return this.dietService.getAllDietsByUserId(userId);
   }
 
-  @Get('/:id')
+  @Get(':id')
   public async getDietById(@Param('id') id: string): Promise<DietDto> {
     const diet = await this.dietService.getDietById(id);
 
@@ -74,7 +74,7 @@ export class DietController {
     await this.dietService.deleteDiet(id);
   }
 
-  @Post('/:id/like')
+  @Post(':id/like')
   public async likeDiet(
     @Param('id') id: string,
     @Body() { userId }: { userId: string }
@@ -89,7 +89,7 @@ export class DietController {
     return this.dietService.likeDiet(diet, user);
   }
 
-  @Post('/:id/save')
+  @Post(':id/save')
   public async saveDiet(
     @Param('id') id: string,
     @Body() { userId }: { userId: string }
