@@ -7,6 +7,8 @@ import { IntakeModule } from '../intake/intake.module';
 import { MeasurementModule } from '../measurement/measurement.module';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '1d' }
     })
   ],
-  controllers: [],
-  providers: []
+  controllers: [AppController],
+  providers: [AppService]
 })
 export class AppModule {}

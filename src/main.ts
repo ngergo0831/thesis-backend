@@ -3,9 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { logger } from './config/logger';
-const morgan = require('morgan');
 import * as rTracer from 'cls-rtracer';
 import { ExceptionHandlerFilter } from './config/exception-handler.filter';
+import * as cookieParser from 'cookie-parser';
+
+const morgan = require('morgan');
 
 async function bootstrap() {
   const app: INestApplication = await NestFactory.create(AppModule, {
@@ -56,6 +58,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
 
+  app.use(cookieParser());
   app.enableCors();
 
   await app.listen(3000);

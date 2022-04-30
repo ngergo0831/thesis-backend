@@ -11,7 +11,16 @@ export class AppService {
     return this.userRepository.save(data);
   }
 
-  async findOne(condition: any): Promise<User> {
-    return this.userRepository.findOne(condition);
+  async findOneEmail(email: string): Promise<User> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .select('user.id')
+      .addSelect('user.password')
+      .where('user.email = :email', { email })
+      .getOne();
+  }
+
+  async findOneId(id: string): Promise<User> {
+    return this.userRepository.findOne(id);
   }
 }

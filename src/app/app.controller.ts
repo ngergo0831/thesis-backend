@@ -12,37 +12,32 @@ import { AppService } from './app.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
+import { ApiTags } from '@nestjs/swagger';
+import { LoginDto, RegisterDto } from './dto/auth.dto';
 
+@ApiTags('App')
 @Controller('api')
 export class AppController {
   constructor(private readonly appService: AppService, private jwtService: JwtService) {}
 
   @Post('register')
-  async register(
-    @Body('name') name: string,
-    @Body('email') email: string,
-    @Body('password') password: string
-  ) {
-    const hashedPassword = await bcrypt.hash(password, 12);
+  async register(@Body() { firstName, lastName, email, password }: RegisterDto) {
+    const hashPassword = await bcrypt.hash(password, 10);
 
-    const user = await this.appService.create({
-      name,
+    return this.appService.create({
+      firstName,
+      lastName,
       email,
-      password: hashedPassword
+      password: hashPassword
     });
-
-    delete user.password;
-
-    return user;
   }
 
   @Post('login')
   async login(
-    @Body('email') email: string,
-    @Body('password') password: string,
+    @Body() { email, password }: LoginDto,
     @Res({ passthrough: true }) response: Response
   ) {
-    const user = await this.appService.findOne({ email });
+    const user = await this.appService.findOneEmail(email);
 
     if (!user) {
       throw new BadRequestException('invalid credentials');
@@ -72,7 +67,7 @@ export class AppController {
         throw new UnauthorizedException();
       }
 
-      const user = await this.appService.findOne({ id: data['id'] });
+      const user = await this.appService.findOneId(data['id']);
 
       const { password, ...result } = user;
 

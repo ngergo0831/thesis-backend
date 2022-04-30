@@ -10,7 +10,6 @@ import {
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Comment } from './comment.entity';
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
 
