@@ -6,6 +6,7 @@ import { logger } from './config/logger';
 import * as rTracer from 'cls-rtracer';
 import { ExceptionHandlerFilter } from './config/exception-handler.filter';
 import * as cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 const morgan = require('morgan');
 
@@ -57,6 +58,35 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
+
+  app.use(
+    helmet.frameguard({
+      action: 'sameorigin'
+    })
+  );
+
+  app.use(
+    helmet.contentSecurityPolicy({
+      useDefaults: true,
+      directives: {
+        defaultSrc: ["'self'"]
+      }
+    })
+  );
+
+  app.use(
+    helmet.hsts({
+      maxAge: 31536000
+    })
+  );
+
+  app.use(helmet.noSniff());
+
+  app.use(
+    helmet.referrerPolicy({
+      policy: 'strict-origin-when-cross-origin'
+    })
+  );
 
   app.use(cookieParser());
   app.enableCors({ credentials: true, origin: true });
