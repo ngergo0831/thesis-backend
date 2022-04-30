@@ -6,6 +6,7 @@ import { DietModule } from '../diet/diet.module';
 import { IntakeModule } from '../intake/intake.module';
 import { MeasurementModule } from '../measurement/measurement.module';
 import { UserModule } from '../user/user.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -14,7 +15,11 @@ import { UserModule } from '../user/user.module';
     DietModule,
     IntakeModule,
     MeasurementModule,
-    UserModule
+    UserModule,
+    JwtModule.register({
+      secret: 'secret',
+      signOptions: { expiresIn: '1d' }
+    })
   ],
   controllers: [],
   providers: []
