@@ -9,3 +9,11 @@ services:
       - MYSQL_DATABASE=thesis
     ports:
       - '3306:3306'
+  thesis_redis:
+    image: redis
+    container_name: thesis_redis
+    command: redis-server --requirepass secret
+    environment:
+      - REDIS_PORT=6379
+    ports:
+      - '6379:6379'

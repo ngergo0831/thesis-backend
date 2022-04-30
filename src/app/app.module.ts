@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import ormconfig from '../../ormconfig';
 import { CommentModule } from '../comment/comment.module';
@@ -9,6 +9,9 @@ import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import type { RedisClientOptions } from 'redis';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -21,9 +24,24 @@ import { AppService } from './app.service';
     JwtModule.register({
       secret: 'secret',
       signOptions: { expiresIn: '1d' }
+    }),
+    CacheModule.register<RedisClientOptions>({
+      isGlobal: true,
+      ttl: 10, // seconds
+      max: 10,
+      store: redisStore,
+      host: 'localhost',
+      port: 6379,
+      password: 'secret'
     })
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor
+    },
+    AppService
+  ]
 })
 export class AppModule {}
