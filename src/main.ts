@@ -59,7 +59,7 @@ async function bootstrap() {
   SwaggerModule.setup('swagger', app, document);
 
   app.use(cookieParser());
-  app.enableCors();
+  app.enableCors({ credentials: true, origin: true });
 
   await app.listen(3000);
 }

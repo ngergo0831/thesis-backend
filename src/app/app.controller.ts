@@ -60,7 +60,6 @@ export class AppController {
   async user(@Req() request: Request) {
     try {
       const cookie = request.cookies['jwt'];
-
       const data = await this.jwtService.verifyAsync(cookie);
 
       if (!data) {
