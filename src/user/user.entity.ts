@@ -7,7 +7,8 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
-  UpdateDateColumn
+  UpdateDateColumn,
+  BeforeUpdate
 } from 'typeorm';
 import * as moment from 'moment';
 import { Exclude } from 'class-transformer';

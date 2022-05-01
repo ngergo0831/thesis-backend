@@ -84,4 +84,27 @@ export class AppController {
       message: 'success'
     };
   }
+
+  @Post('change-password')
+  async changePassword(
+    @Req() request: Request,
+    @Body() { oldPassword, newPassword }: { oldPassword: string; newPassword: string }
+  ) {
+    const cookie = request.cookies['jwt'];
+    const data = await this.jwtService.verifyAsync(cookie);
+
+    if (!data) {
+      throw new UnauthorizedException();
+    }
+
+    const user = await this.appService.findOneId(data['id']);
+
+    if (!(await bcrypt.compare(oldPassword, user.password))) {
+      throw new BadRequestException('invalid credentials');
+    }
+
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+
+    await this.appService.updatePassword(user.id, hashPassword);
+  }
 }
