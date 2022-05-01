@@ -23,7 +23,6 @@ export class AppService {
   async findOneId(id: string): Promise<User> {
     return this.userRepository
       .createQueryBuilder('user')
-      .select('user.id')
       .addSelect('user.password')
       .where('user.id = :id', { id })
       .getOne();
