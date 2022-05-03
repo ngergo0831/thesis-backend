@@ -10,6 +10,7 @@ import {
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { DietDto } from '../diet/dto/diet.dto';
 import { Period } from '../enum/period.enum';
 import { IntakeDto } from './dto/intake.dto';
 import { IntakeService } from './intake.service';
@@ -69,7 +70,7 @@ export class IntakeController {
     @Param('id') id: string,
     @Body('creatorId') creatorId: string,
     @Body('period') period: Period
-  ): Promise<void> {
+  ): Promise<DietDto> {
     return this.intakeService.createDiet(id, creatorId, period);
   }
 }

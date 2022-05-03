@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Diet } from '../diet/diet.entity';
+import { DietDto } from '../diet/dto/diet.dto';
 import { Period } from '../enum/period.enum';
 import { IntakeDto } from './dto/intake.dto';
 import { Intake } from './intake.entity';
@@ -38,7 +39,7 @@ export class IntakeService {
     await this.intakeRepository.delete(id);
   }
 
-  public async createDiet(id: string, creatorId: string, period: Period): Promise<void> {
+  public async createDiet(id: string, creatorId: string, period: Period): Promise<DietDto> {
     const intakeInDatabase = await this.intakeRepository.findOne(id);
 
     if (!intakeInDatabase) {
@@ -51,6 +52,14 @@ export class IntakeService {
       period
     });
 
-    await this.dietRepository.save(diet);
+    const createdDiet = await this.dietRepository.save(diet);
+
+    return this.dietRepository.findOne({
+      where: { id: createdDiet.id },
+      order: {
+        createdAt: 'DESC'
+      },
+      relations: ['likedBy', 'savedBy', 'intake', 'comments']
+    });
   }
 }
