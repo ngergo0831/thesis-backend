@@ -1,15 +1,18 @@
 import {
   Body,
+  CACHE_MANAGER,
   Controller,
   Delete,
   Get,
   HttpCode,
+  Inject,
   NotFoundException,
   Param,
   Patch,
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Cache } from 'cache-manager';
 import { DietDto } from '../diet/dto/diet.dto';
 import { Period } from '../enum/period.enum';
 import { IntakeDto } from './dto/intake.dto';
@@ -18,11 +21,24 @@ import { IntakeService } from './intake.service';
 @ApiTags('Intakes')
 @Controller('intakes')
 export class IntakeController {
-  constructor(private readonly intakeService: IntakeService) {}
+  constructor(
+    private readonly intakeService: IntakeService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
 
   @Get()
   public async getAllIntakes(): Promise<IntakeDto[]> {
-    return this.intakeService.getAllIntakes();
+    const cachedResponse = await this.cacheManager.get('intakes');
+
+    if (cachedResponse) {
+      return cachedResponse as IntakeDto[];
+    }
+
+    const intakes = await this.intakeService.getAllIntakes();
+
+    await this.cacheManager.set('intakes', intakes, { ttl: 0 });
+
+    return intakes;
   }
 
   @Get(':id')

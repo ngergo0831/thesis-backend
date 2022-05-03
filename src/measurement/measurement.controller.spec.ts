@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { CacheModule, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MeasurementController } from './measurement.controller';
 import { Measurement } from './measurement.entity';
@@ -12,6 +12,7 @@ describe('MeasurementController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [CacheModule.register()],
       controllers: [MeasurementController],
       providers: [MeasurementService]
     }).compile();

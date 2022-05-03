@@ -1,37 +1,59 @@
 import {
   Body,
+  CACHE_MANAGER,
   Controller,
   Delete,
   Get,
   HttpCode,
+  Inject,
   NotFoundException,
   Param,
   Patch,
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Cache } from 'cache-manager';
 import { DietDto } from '../diet/dto/diet.dto';
 import { UserDto } from './dto/user.dto';
-import { User } from './user.entity';
 import { UserService } from './user.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
 
   @Get()
   public async getAllUsers(): Promise<UserDto[]> {
-    return this.userService.getAllUsers();
+    const cachedResponse = await this.cacheManager.get('users');
+
+    if (cachedResponse) {
+      return cachedResponse as UserDto[];
+    }
+    const users = await this.userService.getAllUsers();
+
+    await this.cacheManager.set('users', users, { ttl: 0 });
+
+    return users;
   }
 
   @Get('/:id')
   public async getUserById(@Param('id') id: string): Promise<UserDto> {
+    const cachedResponse = await this.cacheManager.get(`user_${id}`);
+
+    if (cachedResponse) {
+      return cachedResponse as UserDto;
+    }
+
     const user = await this.userService.getUserById(id);
 
     if (!user) {
       throw new NotFoundException(`User not found with id ${id}`);
     }
+
+    await this.cacheManager.set(`user_${id}`, user, { ttl: 0 });
 
     return user;
   }

@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { CacheModule, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../user/user.entity';
@@ -15,6 +15,7 @@ describe('DietController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [CacheModule.register()],
       controllers: [DietController],
       providers: [
         DietService,

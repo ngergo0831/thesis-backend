@@ -1,15 +1,18 @@
 import {
   Body,
+  CACHE_MANAGER,
   Controller,
   Delete,
   Get,
   HttpCode,
+  Inject,
   NotFoundException,
   Param,
   Patch,
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Cache } from 'cache-manager';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { Diet } from './diet.entity';
@@ -21,12 +24,23 @@ import { DietDto } from './dto/diet.dto';
 export class DietController {
   constructor(
     private readonly dietService: DietService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   @Get()
   public async getAllDiets(): Promise<DietDto[]> {
-    return this.dietService.getAllDiets();
+    const cachedResponse = await this.cacheManager.get('diets');
+
+    if (cachedResponse) {
+      return cachedResponse as DietDto[];
+    }
+
+    const diets = await this.dietService.getAllDiets();
+
+    await this.cacheManager.set('diets', diets, { ttl: 0 });
+
+    return diets;
   }
 
   @Get('user/:id')

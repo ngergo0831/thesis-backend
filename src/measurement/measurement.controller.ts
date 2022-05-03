@@ -1,26 +1,42 @@
 import {
   Body,
+  CACHE_MANAGER,
   Controller,
   Delete,
   Get,
   HttpCode,
+  Inject,
   NotFoundException,
   Param,
   Patch,
   Post
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Cache } from 'cache-manager';
 import { MeasurementDto } from './dto/measurement.dto';
 import { MeasurementService } from './measurement.service';
 
 @ApiTags('Measurements')
 @Controller('measurements')
 export class MeasurementController {
-  constructor(private readonly measurementService: MeasurementService) {}
+  constructor(
+    private readonly measurementService: MeasurementService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
 
   @Get('user/:id')
   public async getAllMeasurements(@Param('id') userId: string): Promise<any> {
-    return this.measurementService.getAllMeasurements(userId);
+    const cachedResponse = await this.cacheManager.get(`measurements_${userId}`);
+
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    const measurements = await this.measurementService.getAllMeasurements(userId);
+
+    await this.cacheManager.set(`measurements_${userId}`, measurements, { ttl: 0 });
+
+    return measurements;
   }
 
   @Get(':id')
